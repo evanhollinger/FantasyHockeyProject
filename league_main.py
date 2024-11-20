@@ -47,23 +47,4 @@ class League:
         return f"League: {self.name}, Number of teams: {len(self.teams)}"
 
 
-# Example of using the classes:
 
-# Create a league
-fantasy_league = League("Fantasy Football League")
-
-# Create teams and add players
-team1 = Team("Team A", ["Player 1", "Player 2", "Player 3"])
-team2 = Team("Team B", ["Player 4", "Player 5"])
-
-# Add teams to the league
-fantasy_league.add_team(team1)
-fantasy_league.add_team(team2)
-
-# Display information about all teams in the league
-fantasy_league.display_teams()
-
-# Example of adding a new player to a team
-team1.add_player("Player 6")
-print("\nUpdated team details:")
-fantasy_league.display_teams()
