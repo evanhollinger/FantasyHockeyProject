@@ -2,12 +2,6 @@ In this introductory project I will attempt to utilize the ESPN fantasy API, to 
 
 This will be interesting.
 
-Gameplan: (11/19/24)
+Start: (11/19/24)
 _______________________________________________________________
 Goal: Pull data from ESPN fantasy hockey league
-
-Method 1: web-scraping
-    N/A
-
-Method 2: espn-api
-    N/A
