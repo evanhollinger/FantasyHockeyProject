@@ -1,30 +1,10 @@
-from league_main import Team, League
-
-import requests
-import pandas as pd
-
+from league import create_league
 
 if __name__ == '__main__':
     print("Hello world - Day 0 (11/19/2024)")
 
-    # Example of using the classes:
-
-    # Create a league
-    fantasy_league = League("Fantasy Football League")
-
-    # Create teams and add players
-    team1 = Team("ET", ["Michkov", "Sanheim", "Fedotov"])
-    team2 = Team("E2T", ["Brink", "Konecny"])
-
-    # Add teams to the league
-    fantasy_league.add_team(team1)
-    fantasy_league.add_team(team2)
-
-    # Display information about all teams in the league
-    fantasy_league.display_teams()
-
-    # Example of adding a new player to a team
-    team1.add_player("McDavid")
-    print("\nUpdated team details:")
-    fantasy_league.display_teams()
+    # ESPN API key to pull league data and store in url
+    url = "https://lm-api-reads.fantasy.espn.com/apis/v3/games/fhl/seasons/2025/segments/0/leagues/1157174311?view=modular&view=mNav&view=mMatchupScore&view=mScoreboard&view=mStatus&view=mSettings&view=mTeam&view=mPendingTransactions"
+    league = create_league(url)
+    league.display_teams()
 
