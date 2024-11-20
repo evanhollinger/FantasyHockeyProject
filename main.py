@@ -8,3 +8,5 @@ if __name__ == '__main__':
     league = create_league(url)
     league.display_teams()
 
+    print("Goodbye world - Day 0 end")
+
