@@ -19,7 +19,8 @@ def create_league(league_url):
     # Loop through all members (for team names / abrevs)
     for member in members:
         name = member['name']
-        temp = Team(name)
+        team_id = member['id']
+        temp = Team(name, team_id)
         new_league.add_team(temp)
 
     return new_league
@@ -42,9 +43,14 @@ class League:
         """Returns a list of all teams in the league."""
         return self.teams
 
+
     def display_teams(self):
         """Displays information about all the teams in the league."""
-        df = pd.DataFrame(self.get_teams())
+
+        pd.set_option('display.max_colwidth', None)
+        df = pd.DataFrame(self.get_teams())  # Create main DataFrame for the league
+
+        # Display the league DataFrame
         print(df)
 
     def __str__(self):

@@ -2,6 +2,9 @@ In this introductory project I will attempt to utilize the ESPN fantasy API, to 
 
 This will be interesting.
 
-Start: (11/19/24)
-_______________________________________________________________
+(11/19/24)
 Goal: Pull data from ESPN fantasy hockey league
+_______________________________________________________________
+(11/20/24)
+Goal: Pull player data from ESPN and add to teams
+
