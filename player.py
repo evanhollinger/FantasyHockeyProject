@@ -6,6 +6,15 @@ def add_players(league, roster_url):
     r = requests.get(roster_url)
     data = r.json()
 
+    # Position mapping based on defaultPositionId
+    position_map = {
+        1: "Center",
+        2: "Left Wing",
+        3: "Right Wing",
+        4: "Defense",
+        5: "Goalie"
+    }
+
     # Iterate through teams in the data
     for team_data in data['teams']:
         team_id = team_data['id']
@@ -20,7 +29,11 @@ def add_players(league, roster_url):
         # Add players to the team
         for entry in team_data['roster']['entries']:
             player_name = entry['playerPoolEntry']['player']['fullName']
-            player = Player(player_name)  # Create a Player object
+            position_id = entry['playerPoolEntry']['player']['defaultPositionId']
+            position = position_map.get(position_id, "Unknown")  # Map positionId to position
+
+            # Create a Player object with the position
+            player = Player(name=player_name, position=position)  # Ensure the Player class has a 'position' attribute
             team.add_player(player)  # Add the player to the team
 
 
