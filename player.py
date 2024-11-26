@@ -1,10 +1,10 @@
 import requests
-
+import requests
 
 def add_players(league, roster_url):
     # Fetch roster data from the URL
-    r = requests.get(roster_url)
-    data = r.json()
+    response = requests.get(roster_url)
+    data = response.json()
 
     # Position mapping based on defaultPositionId
     position_map = {
@@ -15,6 +15,26 @@ def add_players(league, roster_url):
         5: "Goalie"
     }
 
+    # Updated stat mapping with descriptive labels
+    stat_map = {
+        '13': "Goals",
+        '14': "Assists",
+        '15': "Plus/Minus",
+        '16': "Points",
+        '17': "PIM",       # Penalty Minutes
+        '18': "PPG",       # Power Play Goals
+        '19': "PPA",       # Power Play Assists
+        '27': "TOI/G"      # Time on Ice per Game
+    }
+
+    # Function to convert seconds to mm:ss format
+    def convert_to_time_format(seconds):
+        # Round the seconds to the nearest whole number
+        seconds = round(seconds)
+        minutes = seconds // 60
+        seconds = seconds % 60
+        return f"{minutes:02}:{seconds:02}"
+
     # Iterate through teams in the data
     for team_data in data['teams']:
         team_id = team_data['id']
@@ -22,23 +42,42 @@ def add_players(league, roster_url):
 
         # Find the corresponding team in the league by ID
         team = next((t for t in league.teams if t.id == team_id), None)
-        if team is None:
+        if not team:
             print(f"Team with ID {team_id} not found in league.")
             continue
 
         # Add players to the team
         for entry in team_data['roster']['entries']:
-            player_name = entry['playerPoolEntry']['player']['fullName']
-            position_id = entry['playerPoolEntry']['player']['defaultPositionId']
-            position = position_map.get(position_id, "Unknown")  # Map positionId to position
+            player = entry['playerPoolEntry']['player']
+            player_name = player['fullName']
+            position_id = player['defaultPositionId']
+            position = position_map.get(position_id, "Unknown")
 
-            # Create a Player object with the position
-            player = Player(name=player_name, position=position)  # Ensure the Player class has a 'position' attribute
-            team.add_player(player)  # Add the player to the team
+            # Find the player stats for the specific player ID
+            player_stat = next((e['stats'] for e in player['stats'] if e['id'] == '002025'), {})
 
+            # Map the stats based on stat_map (using the stat map for descriptive labels)
+            mapped_stats = {}
+
+            # Loop over the stat_map and convert the values
+            for key in stat_map:
+                stat_name = stat_map[key]
+                stat_value = player_stat.get(key, 0)
+
+                # If the stat is 'TOI/G', convert it from seconds to mm:ss format
+                if key == '27':
+                    mapped_stats[stat_name] = convert_to_time_format(stat_value)
+                else:
+                    mapped_stats[stat_name] = stat_value
+
+            # Create a Player object with the position and mapped stats
+            new_player = Player(name=player_name, position=position, stats=mapped_stats)
+
+            # Add the player to the team
+            team.add_player(new_player)
 
 class Player:
-    def __init__(self, name, position = None, stats=None):
+    def __init__(self, name, position=None, stats=None):
         """
         Initializes a Player object.
         :param name: Name of the player.
